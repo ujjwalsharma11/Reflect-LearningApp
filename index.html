@@ -29,7 +29,7 @@
             border-radius: 16px;
             text-align: center;
         }
-
+        
         h1 {
             margin: 0 0 20px 0;
             font-size: 68px;
@@ -146,15 +146,29 @@
 
     <div class="box">
         <h1 class="bubblegum-sans-regular">Reflect</h1>
-        <button class="btn" onclick="startQuiz()">Start</button>
+        <button class="btn" onclick="showInstructions()">Start</button>
+
+        <p id="instructionText" 
+            style="display:none;
+            font-family: 'PT Serif', serif;
+            text-align: left;
+            font-style: italic;
+            font-size: 17px;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            color: white;">
+                ✦ Read the text/extract carefully<br>
+                ✦ Type what you understood in one sentence<br>
+                ✦ Your answer must contain the correct keyword<br>
+                ✦ Press Enter to submit
+         </p>
+
+
+        <button class="btn" id="beginQuizBtn" onclick="startQuiz()" style="display:none; margin-top:15px;">
+            Start
+        </button>
     </div>
-    <!-- <div id="homepage" class="page">
-        <div class="box">
-            <h1 class="title">Reflect</h1>
-            <button onclick="startQuiz()" class="start-btn">Start</button>
-        </div>
-    </div> -->
-    
+
 
     <div id="quizPage" class="box" style="display:none;">
         <div id="progressContainer" style="display:none;">
@@ -230,6 +244,21 @@ const questions = [
 
 let current = 0;
 let score = 0;
+
+function showInstructions() {
+    // Hide the title and start button
+    document.querySelector(".bubblegum-sans-regular").style.display = "none";
+    
+    // Hide the first Start button
+    document.querySelector(".btn").style.display = "none";
+
+    // Show instructions
+    document.getElementById("instructionText").style.display = "block";
+
+    // Show Begin Quiz button
+    document.getElementById("beginQuizBtn").style.display = "inline-block";
+}
+
 
 // Start Quiz
 function startQuiz() {
