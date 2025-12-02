@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reflect</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            
+            margin: 0;
+            height: 100vh;
+            background: url('homepage.png') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .box {
+            border: 3px solid white;
+            padding: 40px 60px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0 0 20px 0;
+            font-size: 68px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: white;
+            text-shadow: 2px 2px 5px black;
+        }
+        .bubblegum-sans-regular {
+            font-family: "Bubblegum Sans", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background-color: transparent;
+            border: 2px solid white;
+            border-radius: 6px;
+            font-size: 21px;
+            cursor: pointer;
+            color: white;
+            font-weight: 500;
+        }
+        /* Input Box */
+        #answerInput {
+            width: 90%;
+            padding: 12px 14px;
+            font-size: 17px;
+            border: 2px solid white;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            outline: none;
+            margin-bottom: 15px;
+            font-family: "PT Serif", serif;
+        }
+
+        #answerInput::placeholder {
+            color: #dddddd;
+            opacity: 0.7;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 120px;
+            padding: 10px 15px;
+            font-size: 18px;
+            border: 2px solid white;
+            border-radius: 8px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.05);
+        }
+
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        #quizPage, #resultPage {
+        padding: 10px 15px;
+        width: 320px;
+        }
+        #questionText {
+        font-family: "PT Serif", serif;
+        text-align: left;
+        font-style: italic;
+        font-size: 15px;
+        line-height: 1.4;
+        margin-bottom: 30px;
+        color: lightgrey;
+        }
+        .pt-serif-regular-italic {
+        font-family: "PT Serif", serif;
+        font-weight: 400;
+        font-style: italic;
+        }
+        #progressContainer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        #progressBar {
+            width: 300px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        #progressFill {
+            width: 0%;
+            height: 100%;
+            background: lightgreen;
+            transition: width 0.4s ease;
+        }
+
+        .fade-box {
+            transition: background-color 0.6s ease, color 0.6s ease;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h1 class="bubblegum-sans-regular">Reflect</h1>
+        <button class="btn" onclick="startQuiz()">Start</button>
+    </div>
+    <!-- <div id="homepage" class="page">
+        <div class="box">
+            <h1 class="title">Reflect</h1>
+            <button onclick="startQuiz()" class="start-btn">Start</button>
+        </div>
+    </div> -->
+    
+
+    <div id="quizPage" class="box" style="display:none;">
+        <div id="progressContainer" style="display:none;">
+        <div id="progressBar">
+            <div id="progressFill"></div>
+        </div>
+    </div>
+        <h2 id="questionText"></h2>
+        <input type="text" id="answerInput" placeholder="What you understood" />
+        <button onclick="submitAnswer()" class="submit-btn">Enter</button>
+    </div>
+
+    <div id="resultPage" class="box" style="display:none;">
+        <h2>Your Score</h2>
+        <p id="scoreText"></p>
+    </div>
+
+    <script>
+        // 10 Questions
+const questions = [
+    { q: `Two seeds lay side by side.
+            One feared the darkness and refused to split open.
+            The other embraced the soil and broke apart.
+            Month later, the fearful seed remained intact—but unchanged.
+            The broken seed became a tree.`, a: "growth" },
+    { q: `A feather drifted wherever the wind wanted—
+            called “gentle,” “easy,” “light.”
+            But deep down it knew:
+            floating wasn’t freedom
+            when the wind chose every direction.
+            One day, it landed deliberately,
+            just to feel a ground
+            that didn’t move it.`, a: "freedom" },
+    { q: `A pawn advanced slowly,
+            pretending to be harmless.
+            Each step looked insignificant—
+            until the moment it crossed the board
+            and became something else.
+            By then, everyone wondered
+            why they hadn’t stopped
+            the quiet one.`, a: "silence" },
+    { q: `“The future belongs to those who learn more 
+            skills and combine them in creative ways.”
+            “Mastery is not a function of genius or talent.
+            It is a function of time and intense focus
+            applied to a particular field of knowledge.”`, a: "mastery" },
+    { q: `He wandered far seeking treasure,
+            only to find a stone in his pocket he’d forgotten.
+            When he finally looked at it,
+            it glittered like every place he had searched.`, a: "discovery" },
+    { q: `He folded a small note into his shoe—
+            a single sentence he refused to forget.
+            Whenever life felt unbearable,
+            the paper pressed lightly against his heel and kept him moving.`, a: "purpose" },
+    { q: `He swept the same courtyard daily.
+            Dust returned every night,
+            but his mind grew clearer with each stroke.
+            Some cleaning, he learned,
+            was meant for the inside.`, a: "clarity" },
+    { q: `He practiced in an empty hall,
+            long after everyone else had stopped.
+            One day, a stranger heard him and opened a door
+            he didn’t know existed.`, a: "preparation" },
+    { q: `He built a small wooden desk in a room with no clock.
+            Every hour he spent there
+            made the world outside quieter
+            and his ideas louder.`, a: "focus" },
+    { q: `He placed his trophies in a box under his bed.
+            Not out of shame—out of hunger.
+            With the shelf empty,
+            there was always room to grow.`, a: "humility" }
+];
+
+let current = 0;
+let score = 0;
+
+// Start Quiz
+function startQuiz() {
+    document.querySelector(".box").style.display = "none";
+    document.getElementById("quizPage").style.display = "block";
+    loadQuestion();
+    document.getElementById("progressContainer").style.display = "flex";
+}
+
+// Load Question
+function loadQuestion() {
+    document.getElementById("questionText").innerText = questions[current].q;
+    document.getElementById("answerInput").value = "";
+
+    // Update progress
+    let progressPercent = ((current) / questions.length) * 100;
+    document.getElementById("progressFill").style.width = progressPercent + "%";
+}
+
+// Submit Answer
+// Submit Answer
+function submitAnswer() {
+    let userAns = document.getElementById("answerInput").value.trim().toLowerCase();
+    let correctAnswer = questions[current].a.toLowerCase();
+
+    // Check if user's input contains the keyword
+    if (userAns.includes(correctAnswer)) {
+        score++;
+    }
+
+    current++;
+    if (current < questions.length) {
+        loadQuestion();
+    } else {
+        endQuiz();
+    }
+}
+
+// End Quiz
+function endQuiz() {
+    document.getElementById("quizPage").style.display = "none";
+    document.getElementById("resultPage").style.display = "block";
+
+    // Show score
+    document.getElementById("scoreText").innerText = `${score} / ${questions.length}`;
+
+    // Show all correct keywords
+    let answerList = questions.map((q, index) => {
+        return `${index + 1}. ${q.a}`;
+    }).join("\n");
+
+    // Add a new <pre> element to preserve formatting
+    let answersElement = document.createElement("pre");
+    answersElement.style.color = "lightgreen";
+    answersElement.style.marginTop = "20px";
+    answersElement.innerText = answerList;
+
+    document.getElementById("resultPage").appendChild(answersElement);
+}
+
+
+// ENTER key support
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && 
+        document.getElementById("quizPage").style.display === "block") {
+        submitAnswer();
+    }
+});
+
+    </script>
+</body>
+</html>
